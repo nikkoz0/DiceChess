@@ -10,8 +10,6 @@ def opponent(color):
 
 
 def correct_coords(row, col):
-    '''Функция проверяет, что координаты (row, col) лежат
-    внутри доски'''
     return 0 <= row < 8 and 0 <= col < 8
 
 
@@ -26,9 +24,6 @@ class Board:
         return self.color
 
     def cell(self, row, col):
-        '''Возвращает строку из двух символов. Если в клетке (row, col)
-        находится фигура, символы цвета и фигуры. Если клетка пуста,
-        то два пробела.'''
         piece = self.field[row][col]
         if piece is None:
             return ' '
@@ -58,8 +53,8 @@ class Board:
             return False
         if not piece.can_move(self, row, col, row1, col1):
             return False
-        self.field[row][col] = None  # Снять фигуру.
-        self.field[row1][col1] = piece  # Поставить на новое место.
+        self.field[row][col] = None
+        self.field[row1][col1] = piece 
         self.color = opponent(self.color)
         return True
 
@@ -149,8 +144,6 @@ class Rook:
         return 'R'
 
     def can_move(self, board, row, col, row1, col1):
-        # Невозможно сделать ход в клетку, которая не лежит в том же ряду
-        # или столбце клеток.
         if row != row1 and col != col1:
             return False
         piece1 = board.get_piece(row1, col1)
@@ -166,7 +159,6 @@ class Rook:
 
         step = 1 if (col1 >= col) else -1
         for c in range(col + step, col1, step):
-            # Если на пути по вертикали есть фигура
             if not (board.get_piece(row, c) is None):
                 return False
 
@@ -188,8 +180,6 @@ class Pawn:
         return 'P'
 
     def can_move(self, board, row, col, row1, col1):
-        # Пешка может ходить только по вертикали
-        # "взятие на проходе" не реализовано
         if col != col1:
             return False
 
@@ -321,18 +311,18 @@ class Bishop:
 
 
 
-board = Board()
-board.field = [([None] * 8) for i in range(8)]
-board.field[1][3] = (Bishop(WHITE))
-board.field[2][4] = (Pawn(WHITE))
-queen = board.get_piece(1, 3)
-
-for row in range(7, -1, -1):
-    for col in range(8):
-        if queen.can_move(board, 1, 3, row, col):
-            print('x', end='')
-        else:
-            cell = board.cell(row, col)
-            cell = cell if cell != ' ' else '-'
-            print(cell, end='')
-    print()
+#board = Board()
+#board.field = [([None] * 8) for i in range(8)]
+#board.field[1][3] = (Bishop(WHITE))
+#board.field[2][4] = (Pawn(WHITE))
+#queen = board.get_piece(1, 3)
+#
+#for row in range(7, -1, -1):
+#    for col in range(8):
+#        if queen.can_move(board, 1, 3, row, col):
+#            print('x', end='')
+#        else:
+#            cell = board.cell(row, col)
+#            cell = cell if cell != ' ' else '-'
+#            print(cell, end='')
+#    print()
