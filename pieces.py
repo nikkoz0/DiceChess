@@ -1,12 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout
+from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel
 from PyQt6.QtGui import QPainter, QPixmap
 from PyQt6.QtCore import Qt
 from chess import *
 
-board = Board()
 
-
-class Piece_Image(QWidget):
+class Piece_Image(QLabel):
     def __init__(self, color):
         super().__init__()
 
@@ -14,6 +12,11 @@ class Piece_Image(QWidget):
         qp = QPainter(self)
         size = min(self.width(), self.height())
         qp.drawPixmap(0, 0, self.image.scaled(size, size, Qt.AspectRatioMode.KeepAspectRatio))
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            pass
+
 
 
 class Pawn_Image(Piece_Image):
@@ -70,8 +73,13 @@ class Knight_Image(Piece_Image):
             self.image = QPixmap('Images/bn.png')
 
 
-class Board_Image(QWidget):
+class Empty(QLabel):
     def __init__(self):
+        super().__init__()
+
+
+class Board_Image(QWidget):
+    def __init__(self, board):
         super().__init__()
         layout = QGridLayout(self)
         layout.setSpacing(0)
@@ -99,6 +107,9 @@ class Board_Image(QWidget):
                         layout.addWidget(Bishop_Image(piece.get_color()), row1, col)
                     elif piece.char() == 'R':
                         layout.addWidget(Rook_Image(piece.get_color()), row1, col)
+                else:
+                    row1 = 7 - row
+                    layout.addWidget(Empty(), row1, col)
 
     def paintEvent(self, event):
         qp = QPainter(self)
