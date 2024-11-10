@@ -20,6 +20,23 @@ class Board:
         for row in range(8):
             self.field.append([None] * 8)
 
+        self.field[0] = [
+            Rook(WHITE), Knight(WHITE), Bishop(WHITE), Queen(WHITE),
+            King(WHITE), Bishop(WHITE), Knight(WHITE), Rook(WHITE)
+        ]
+        self.field[1] = [
+            Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE),
+            Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE)
+        ]
+        self.field[6] = [
+            Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK),
+            Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)
+        ]
+        self.field[7] = [
+            Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK),
+            King(BLACK), Bishop(BLACK), Knight(BLACK), Rook(BLACK)
+        ]
+
     def current_player_color(self):
         return self.color
 
@@ -54,7 +71,7 @@ class Board:
         if not piece.can_move(self, row, col, row1, col1):
             return False
         self.field[row][col] = None
-        self.field[row1][col1] = piece 
+        self.field[row1][col1] = piece
         self.color = opponent(self.color)
         return True
 
@@ -308,21 +325,3 @@ class Bishop:
 
     def can_attack(self, board, row, col, row1, col1):
         return self.can_move(self, board, row, col, row1, col1)
-
-
-
-#board = Board()
-#board.field = [([None] * 8) for i in range(8)]
-#board.field[1][3] = (Bishop(WHITE))
-#board.field[2][4] = (Pawn(WHITE))
-#queen = board.get_piece(1, 3)
-#
-#for row in range(7, -1, -1):
-#    for col in range(8):
-#        if queen.can_move(board, 1, 3, row, col):
-#            print('x', end='')
-#        else:
-#            cell = board.cell(row, col)
-#            cell = cell if cell != ' ' else '-'
-#            print(cell, end='')
-#    print()
