@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
                              QHBoxLayout, QPushButton, QVBoxLayout, QLabel)
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
-from pieces import Board_Image
+from pieces import *
 from chess import *
 
 BOARD = Board()
@@ -21,7 +21,7 @@ class Chess(QMainWindow):
 
         #self.box = QVBoxLayout(self)
 
-        #self.button = QPushButton()
+        self.button = QPushButton()
         #self.dice_1 = QLabel(self)
         #self.dice_2 = QLabel(self)
         #self.dice_3 = QLabel(self)
@@ -34,11 +34,19 @@ class Chess(QMainWindow):
         #self.box.addWidget(self.button)
 
         layout.addWidget(self.board)
+        layout.addWidget(self.button)
+        self.button.clicked.connect(self.move)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
             x = event.pos().x()
             y = event.pos().y()
+
+    def move(self):
+        row, col = PIECE_CLICKED
+        row1, col1 = PIECE_TO_MOVE
+        BOARD.move_piece(row, col, row1, col1)
+        self.board = Board_Image(BOARD)
 
 
 

@@ -4,8 +4,8 @@ from PyQt6.QtCore import Qt
 from chess import *
 
 
-PIECE_CLICKED = [None, None]
-PIECE_TO_MOVE = [None, None]
+PIECE_CLICKED = [0, 0]
+PIECE_TO_MOVE = [0, 0]
 class Piece_Image(QLabel):
     def __init__(self, x, y):
         self.x = x
