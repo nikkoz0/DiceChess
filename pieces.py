@@ -4,8 +4,12 @@ from PyQt6.QtCore import Qt
 from chess import *
 
 
+PIECE_CLICKED = [None, None]
+PIECE_TO_MOVE = [None, None]
 class Piece_Image(QLabel):
-    def __init__(self, color):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         super().__init__()
 
     def paintEvent(self, event):
@@ -15,13 +19,16 @@ class Piece_Image(QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            pass
+            PIECE_CLICKED[0] = self.x
+            PIECE_CLICKED[1] = self.y
+
+
 
 
 
 class Pawn_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wp.png')
         else:
@@ -29,8 +36,8 @@ class Pawn_Image(Piece_Image):
 
 
 class King_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wk.png')
         else:
@@ -38,8 +45,8 @@ class King_Image(Piece_Image):
 
 
 class Queen_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wq.png')
         else:
@@ -47,8 +54,8 @@ class Queen_Image(Piece_Image):
 
 
 class Rook_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wr.png')
         else:
@@ -56,8 +63,8 @@ class Rook_Image(Piece_Image):
 
 
 class Bishop_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wb.png')
         else:
@@ -65,8 +72,8 @@ class Bishop_Image(Piece_Image):
 
 
 class Knight_Image(Piece_Image):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self, x, y, color):
+        super().__init__(x, y)
         if color == WHITE:
             self.image = QPixmap('Images/wn.png')
         else:
@@ -74,8 +81,15 @@ class Knight_Image(Piece_Image):
 
 
 class Empty(QLabel):
-    def __init__(self):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         super().__init__()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            PIECE_TO_MOVE[0] = self.x
+            PIECE_TO_MOVE[1] = self.y
 
 
 class Board_Image(QWidget):
@@ -86,30 +100,26 @@ class Board_Image(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.autoFillBackground = QPixmap('Images/desk.png')
 
-        for i in range(8):
-            layout.setRowStretch(i, 1)
-            layout.setColumnStretch(i, 1)
-
         for row in range(8):
             for col in range(8):
                 piece = board.get_piece(row, col)
                 if piece:
                     row1 = 7 - row
                     if piece.char() == 'P':
-                        layout.addWidget(Pawn_Image(piece.get_color()), row1, col)
+                        layout.addWidget(Pawn_Image(row, col, piece.get_color()), row1, col)
                     elif piece.char() == 'Q':
-                        layout.addWidget(Queen_Image(piece.get_color()), row1, col)
+                        layout.addWidget(Queen_Image(row, col, piece.get_color()), row1, col)
                     elif piece.char() == 'K':
-                        layout.addWidget(King_Image(piece.get_color()), row1, col)
+                        layout.addWidget(King_Image(row, col, piece.get_color()), row1, col)
                     elif piece.char() == 'N':
-                        layout.addWidget(Knight_Image(piece.get_color()), row1, col)
+                        layout.addWidget(Knight_Image(row, col, piece.get_color()), row1, col)
                     elif piece.char() == 'B':
-                        layout.addWidget(Bishop_Image(piece.get_color()), row1, col)
+                        layout.addWidget(Bishop_Image(row, col, piece.get_color()), row1, col)
                     elif piece.char() == 'R':
-                        layout.addWidget(Rook_Image(piece.get_color()), row1, col)
+                        layout.addWidget(Rook_Image(row, col, piece.get_color()), row1, col)
                 else:
                     row1 = 7 - row
-                    layout.addWidget(Empty(), row1, col)
+                    layout.addWidget(Empty(row, col), row1, col)
 
     def paintEvent(self, event):
         qp = QPainter(self)
