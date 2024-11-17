@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem
 class Statistics_Window(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setFixedSize(600, 400)
         uic.loadUi('Ui/statistics.ui', self)
         self.con = sqlite3.connect('statistics/statistics.db')
         cur = self.con.cursor()
@@ -19,5 +20,6 @@ class Statistics_Window(QMainWindow):
                 for j, elem in enumerate(row):
                     self.tableWidget.setItem(
                         i, j, QTableWidgetItem(str(elem)))
+
 
 
