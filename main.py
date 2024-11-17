@@ -2,6 +2,7 @@ import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6 import uic
+from statistic import Statistics_Window
 
 
 class Main_Window(QMainWindow):
@@ -20,7 +21,9 @@ class Main_Window(QMainWindow):
         pass
 
     def statistic(self):
-        pass
+        self.window = Statistics_Window()
+        self.window.show()
+
 
 
 if __name__ == '__main__':

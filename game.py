@@ -37,15 +37,15 @@ class Chess(QMainWindow):
         layout.addWidget(self.button)
         self.button.clicked.connect(self.move)
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton:
-            x = event.pos().x()
-            y = event.pos().y()
+    #def mousePressEvent(self, event):
+    #    if event.button() == Qt.MouseButton.LeftButton:
+    #       x = event.pos().x()
+    #        y = event.pos().y()
 
     def move(self):
         row, col = PIECE_CLICKED
         row1, col1 = PIECE_TO_MOVE
-        BOARD.move_piece(row, col, row1, col1)
+        print(BOARD.move_piece(row, col, row1, col1))
         self.board = Board_Image(BOARD)
 
 
