@@ -20,6 +20,7 @@ class Statistics_Window(QMainWindow):
                 for j, elem in enumerate(row):
                     self.tableWidget.setItem(
                         i, j, QTableWidgetItem(str(elem)))
+        self.setWindowTitle('Статистика игр')
 
 
 

@@ -68,11 +68,11 @@ class Board:
             return False
         if piece.get_color() != self.color:
             return False
-        if not piece.can_move(self, row, col, row1, col1):
+        if (not (piece.can_move(self, row, col, row1, col1)) and
+                not (piece.can_attack(self, row, col, row1, col1))):
             return False
         self.field[row][col] = None
         self.field[row1][col1] = piece
-        self.color = opponent(self.color)
         return True
 
     def move_and_promote_pawn(self, row, col, row1, col1, char):
@@ -94,7 +94,6 @@ class Board:
                     self.field[row1][col1] = Bishop(color)
                 else:
                     self.field[row1][col1] = Knight(color)
-                self.color = opponent(self.color)
                 return True
         return False
 
@@ -146,7 +145,7 @@ class Queen:
         return 'Q'
 
     def can_attack(self, board, row, col, row1, col1):
-        return self.can_move(self, board, row, col, row1, col1)
+        return self.can_move(board, row, col, row1, col1)
 
 
 class Rook:
@@ -259,7 +258,7 @@ class Knight:
         return False
 
     def can_attack(self, board, row, col, row1, col1):
-        return self.can_move(self, board, row, col, row1, col1)
+        return self.can_move(board, row, col, row1, col1)
 
 
 class King:
@@ -285,7 +284,7 @@ class King:
         return False
 
     def can_attack(self, board, row, col, row1, col1):
-        return self.can_move(self, board, row, col, row1, col1)
+        return self.can_move(board, row, col, row1, col1)
 
 
 class Bishop:
@@ -324,4 +323,4 @@ class Bishop:
         return False
 
     def can_attack(self, board, row, col, row1, col1):
-        return self.can_move(self, board, row, col, row1, col1)
+        return self.can_move(board, row, col, row1, col1)

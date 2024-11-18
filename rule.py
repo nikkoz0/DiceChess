@@ -14,3 +14,4 @@ class Rule(QMainWindow):
                 'Цель- срубить вражеского короля.\n'
                 'В остольном, правила, как в обычных шаматах.\n')
         self.label.setText(text)
+        self.setWindowTitle('Правила')

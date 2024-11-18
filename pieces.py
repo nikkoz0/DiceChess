@@ -4,12 +4,15 @@ from PyQt6.QtCore import Qt
 from chess import *
 
 
-PIECE_CLICKED = [0, 0]
-PIECE_TO_MOVE = [0, 0]
+PIECE_CLICKED = [None, None]
+PIECE_TO_MOVE = [None, None]
+
+
 class Piece_Image(QLabel):
-    def __init__(self, x, y):
+    def __init__(self, x, y, board):
         self.x = x
         self.y = y
+        self.board = board
         super().__init__()
 
     def paintEvent(self, event):
@@ -19,16 +22,28 @@ class Piece_Image(QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            PIECE_CLICKED[0] = self.x
-            PIECE_CLICKED[1] = self.y
-
-
+            if (PIECE_CLICKED[0] is None):
+                PIECE_CLICKED[0] = self.x
+                PIECE_CLICKED[1] = self.y
+            else:
+                piece = self.board.get_piece(PIECE_CLICKED[0], PIECE_CLICKED[1])
+                piece_2 = self.board.get_piece(self.x, self.y)
+                if piece is None:
+                    PIECE_CLICKED[0] = self.x
+                    PIECE_CLICKED[1] = self.y
+                else:
+                    if piece_2.get_color() == piece.get_color():
+                        PIECE_CLICKED[0] = self.x
+                        PIECE_CLICKED[1] = self.y
+                    else:
+                        PIECE_TO_MOVE[0] = self.x
+                        PIECE_TO_MOVE[1] = self.y
 
 
 
 class Pawn_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y, board, color):
+        super().__init__(x, y, board)
         if color == WHITE:
             self.image = QPixmap('Images/wp.png')
         else:
@@ -36,8 +51,8 @@ class Pawn_Image(Piece_Image):
 
 
 class King_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y,board, color):
+        super().__init__(x, y, board)
         if color == WHITE:
             self.image = QPixmap('Images/wk.png')
         else:
@@ -45,8 +60,8 @@ class King_Image(Piece_Image):
 
 
 class Queen_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y, board, color):
+        super().__init__(x, y, board)
         if color == WHITE:
             self.image = QPixmap('Images/wq.png')
         else:
@@ -54,8 +69,8 @@ class Queen_Image(Piece_Image):
 
 
 class Rook_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y, board, color):
+        super().__init__(x, y, board)
         if color == WHITE:
             self.image = QPixmap('Images/wr.png')
         else:
@@ -63,8 +78,8 @@ class Rook_Image(Piece_Image):
 
 
 class Bishop_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y, board,  color):
+        super().__init__(x, y, board)
         if color == WHITE:
             self.image = QPixmap('Images/wb.png')
         else:
@@ -72,8 +87,8 @@ class Bishop_Image(Piece_Image):
 
 
 class Knight_Image(Piece_Image):
-    def __init__(self, x, y, color):
-        super().__init__(x, y)
+    def __init__(self, x, y, board, color):
+        super().__init__(x, y,board)
         if color == WHITE:
             self.image = QPixmap('Images/wn.png')
         else:
@@ -88,41 +103,41 @@ class Empty(QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            PIECE_TO_MOVE[0] = self.x
-            PIECE_TO_MOVE[1] = self.y
+            if not PIECE_CLICKED[0] is None:
+                PIECE_TO_MOVE[0] = self.x
+                PIECE_TO_MOVE[1] = self.y
 
 
 class Board_Image(QWidget):
     def __init__(self, board):
         super().__init__()
-        layout = QGridLayout(self)
-        layout.setSpacing(0)
-        layout.setContentsMargins(0, 0, 0, 0)
+        self.layout = QGridLayout(self)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.autoFillBackground = QPixmap('Images/desk.png')
 
         for row in range(8):
             for col in range(8):
                 piece = board.get_piece(row, col)
+                row1 = 7 - row
                 if piece:
-                    row1 = 7 - row
                     if piece.char() == 'P':
-                        layout.addWidget(Pawn_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(Pawn_Image(row, col, board, piece.get_color()), row1, col)
                     elif piece.char() == 'Q':
-                        layout.addWidget(Queen_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(Queen_Image(row, col,board,  piece.get_color()), row1, col)
                     elif piece.char() == 'K':
-                        layout.addWidget(King_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(King_Image(row, col,board,  piece.get_color()), row1, col)
                     elif piece.char() == 'N':
-                        layout.addWidget(Knight_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(Knight_Image(row, col,board, piece.get_color()), row1, col)
                     elif piece.char() == 'B':
-                        layout.addWidget(Bishop_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(Bishop_Image(row, col,board, piece.get_color()), row1, col)
                     elif piece.char() == 'R':
-                        layout.addWidget(Rook_Image(row, col, piece.get_color()), row1, col)
+                        self.layout.addWidget(Rook_Image(row, col,board, piece.get_color()), row1, col)
                 else:
-                    row1 = 7 - row
-                    layout.addWidget(Empty(row, col), row1, col)
-
+                    self.layout.addWidget(Empty(row, col), row1, col)
     def paintEvent(self, event):
         qp = QPainter(self)
-        rect = self.layout().geometry()
+        rect = self.layout.geometry()
         qp.drawPixmap(rect, self.autoFillBackground.scaled(rect.size(),
                                                            Qt.AspectRatioMode.KeepAspectRatio))
+

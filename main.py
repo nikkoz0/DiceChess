@@ -18,10 +18,12 @@ class Main_Window(QMainWindow):
         self.rule_button.clicked.connect(self.rule)
         self.statistic_button.clicked.connect(self.statistic)
         self.setStyleSheet('.QWidget {background-image: url(Images/background.jpg);}')
+        self.setWindowTitle('Меню')
 
     def play(self):
         self.ChessWindow = Chess()
         self.ChessWindow.show()
+        self.hide()
 
     def rule(self):
         self.RuleWindow = Rule()
