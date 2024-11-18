@@ -1,16 +1,17 @@
 import random
 
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
-                             QHBoxLayout, QPushButton, QVBoxLayout, QLabel,)
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtWidgets import (QMainWindow,
+                             QHBoxLayout, QPushButton, QVBoxLayout,)
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 from pieces import *
 from return_image import return_image, image_for_dice
 from chess import Board
 from Game_End import End
-from dices_move import  can_move
+from dices_move import can_move
 
 all_pieces = ['Q', 'P', 'N', 'K', 'B', 'R']
+
 
 class Chess(QMainWindow):
     def __init__(self):
@@ -38,7 +39,6 @@ class Chess(QMainWindow):
         self.b = Board()
         self.board = Board_Image(self.b)
 
-
         self.box.addWidget(self.dice_1)
         self.box.addWidget(self.dice_2)
         self.box.addWidget(self.dice_3)
@@ -49,9 +49,8 @@ class Chess(QMainWindow):
         self.button.clicked.connect(self.but)
         self.setWindowTitle('Игра')
 
-
     def but(self):
-        if not(self.dices):
+        if not (self.dices):
             color = self.b.current_player_color()
             p_1 = random.choice(all_pieces)
             p_2 = random.choice(all_pieces)
@@ -60,18 +59,16 @@ class Chess(QMainWindow):
             image_for_dice(p_1, self.dice_1, color)
             image_for_dice(p_2, self.dice_2, color)
             image_for_dice(p_3, self.dice_3, color)
-            if not(can_move(self.b, color, self.dices)):
+            if not (can_move(self.b, color, self.dices)):
                 self.dices = []
                 self.b.color = opponent(color)
-
-
 
     def mouseReleaseEvent(self, event):
         desk = []
         color = self.b.current_player_color()
         row, col = PIECE_CLICKED
         row1, col1 = PIECE_TO_MOVE
-        if not(row1 is None) and not(row is None):
+        if not (row1 is None) and not (row is None):
             piece_1 = self.b.get_piece(row, col)
             piece_2 = self.b.get_piece(row1, col1)
             if piece_2:
@@ -97,10 +94,9 @@ class Chess(QMainWindow):
                     self.b.move_piece(row, col, row1, col1)
                     self.dices.remove(piece_1.char())
 
-            if not(can_move(self.b, color, self.dices)):
+            if not (can_move(self.b, color, self.dices)):
                 self.dices = []
                 self.b.color = opponent(color)
-
 
             for row in range(7, -1, -1):
                 for col in range(8):
@@ -114,4 +110,3 @@ class Chess(QMainWindow):
                 else:
                     end = End(1)
                 end.show()
-

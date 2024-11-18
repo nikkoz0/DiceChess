@@ -2,8 +2,6 @@ import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap, QPainter
-from PyQt6.QtCore import Qt
 from statistic import Statistics_Window
 from game import Chess
 from rule import Rule
