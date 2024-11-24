@@ -55,14 +55,10 @@ class Board:
             return None
 
     def move_piece(self, row, col, row1, col1):
-        '''Переместить фигуру из точки (row, col) в точку (row1, col1).
-        Если перемещение возможно, метод выполнит его и вернёт True.
-        Если нет --- вернёт False'''
-
         if not correct_coords(row, col) or not correct_coords(row1, col1):
             return False
         if row == row1 and col == col1:
-            return False  # нельзя пойти в ту же клетку
+            return False
         piece = self.field[row][col]
         if piece is None:
             return False

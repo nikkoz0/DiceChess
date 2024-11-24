@@ -12,14 +12,15 @@ class Statistics_Window(QMainWindow):
         self.con = sqlite3.connect('statistics/statistics.db')
         cur = self.con.cursor()
         result = cur.execute("""SELECT * FROM statistics""").fetchall()
+        if not result:
+            self.statusBar().showMessage('Пока игроков нет')
+            return
         self.tableWidget.setRowCount(len(result))
-        if result:
-            for i, row in enumerate(result):
-                self.tableWidget.setRowCount(
-                    self.tableWidget.rowCount() + 1)
-                for j, elem in enumerate(row):
-                    self.tableWidget.setItem(
-                        i, j, QTableWidgetItem(str(elem)))
+        self.tableWidget.setColumnCount(len(result[0]))
+        self.titles =[description[0] for description in cur.description]
+        for i, elem in enumerate(result):
+            for j, val in enumerate(elem):
+                self.tableWidget.setItem(i, j, QTableWidgetItem(str(val)))
         self.setWindowTitle('Статистика игр')
 
 

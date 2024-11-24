@@ -5,6 +5,7 @@ from PyQt6 import uic
 from statistic import Statistics_Window
 from game import Chess
 from rule import Rule
+from Player import Player
 
 
 class Main_Window(QMainWindow):
@@ -21,6 +22,8 @@ class Main_Window(QMainWindow):
     def play(self):
         self.ChessWindow = Chess()
         self.ChessWindow.show()
+        self.p = Player()
+        self.p.show()
         self.hide()
 
     def rule(self):

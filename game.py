@@ -9,6 +9,7 @@ from return_image import return_image, image_for_dice
 from chess import Board
 from Game_End import End
 from dices_move import can_move
+from Player import  PLAYER_BLACK, PLAYER_WHITE
 
 all_pieces = ['Q', 'P', 'N', 'K', 'B', 'R']
 
@@ -24,6 +25,7 @@ class Chess(QMainWindow):
         self.layout = QHBoxLayout(self.central)
         self.piece_can_move = []
 
+        self.flag_end = False
         self.box = QVBoxLayout(self)
 
         self.button = QPushButton()
@@ -49,6 +51,18 @@ class Chess(QMainWindow):
         self.button.clicked.connect(self.but)
         self.setWindowTitle('Игра')
 
+        color = self.b.current_player_color()
+        p_1 = random.choice(all_pieces)
+        p_2 = random.choice(all_pieces)
+        p_3 = random.choice(all_pieces)
+        self.dices = [p_1, p_2, p_3]
+        image_for_dice(p_1, self.dice_1, color)
+        image_for_dice(p_2, self.dice_2, color)
+        image_for_dice(p_3, self.dice_3, color)
+        if not (can_move(self.b, color, self.dices)):
+            self.dices = []
+            self.b.color = opponent(color)
+
     def but(self):
         if not (self.dices):
             color = self.b.current_player_color()
@@ -68,7 +82,7 @@ class Chess(QMainWindow):
         color = self.b.current_player_color()
         row, col = PIECE_CLICKED
         row1, col1 = PIECE_TO_MOVE
-        if not (row1 is None) and not (row is None):
+        if not (row1 is None) and not (row is None) and self.dices:
             piece_1 = self.b.get_piece(row, col)
             piece_2 = self.b.get_piece(row1, col1)
             if piece_2:
@@ -106,7 +120,13 @@ class Chess(QMainWindow):
             if 'wK' not in desk or 'bK' not in desk:
                 self.setEnabled(False)
                 if 'wk' not in desk:
-                    end = End(0)
+                    self.end = End(0, PLAYER_WHITE[0], PLAYER_BLACK[0])
                 else:
-                    end = End(1)
-                end.show()
+                    self.end = End(1, PLAYER_WHITE[0], PLAYER_BLACK[0])
+                self.flag_end = True
+
+
+    def paintEvent(self, a0):
+        if self.flag_end:
+            self.end.show()
+            self.close()
