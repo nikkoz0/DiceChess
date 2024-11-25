@@ -18,8 +18,6 @@ class Player(QDialog):
                 PLAYER_WHITE.append(self.White_name.text())
                 PLAYER_BLACK.append(self.Black_name.text())
                 self.close()
-            else:
-                self.statusBar().showMessage('Имена должны быть разными')
 
     def cancel(self):
         self.close()
